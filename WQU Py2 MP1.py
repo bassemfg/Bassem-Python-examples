@@ -30,10 +30,11 @@ except Exception as ex:
 finally: 
     print(data_array)
 
-# Original "data set" --- 21 random numbers between 0 and 1.
-x0 = range(len(data_array))
-y0 = data_array
+# Original "data set" --- 21 samples for January daily closing prices.
+x0 = range(len(data_array))     # 0 to data length, step 1
+y0 = data_array                 # downloaded close price values
 
+# original plot
 plt.plot(x0, y0, 'o', label='Data')
 
 # Array with points in between those of the data set for interpolation.
