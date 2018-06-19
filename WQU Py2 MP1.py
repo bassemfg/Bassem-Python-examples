@@ -1,27 +1,32 @@
 
+import csv
 import quandl
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy as np_data
 from io import StringIO
-import csv
 from scipy.interpolate import interp1d
 from scipy.optimize import leastsq
 import numpy.polynomial.polynomial as poly
 
 quandl.ApiConfig.api_key ='RqpDsLqAEJyHa7iAADNQ'
 
-stockSymbol = input('Enter a quandl stock symbol: ')
 
 
-#try:
-data = quandl.Dataset('WIKI/'+stockSymbol).data(params={ 'start_date':'2018-01-01', 'end_date':'2018-01-31'})
-i=0
-data_array= []
-csv_data = data.to_csv()
+try:    
+    stockSymbol = input('Enter a quandl stock symbol: ')
+    data = quandl.Dataset('WIKI/'+stockSymbol).data(params={ 'start_date':'2018-01-01', 'end_date':'2018-01-31'})   
+    data_array= []
+    csv_data = data.to_csv()
+    
+except Exception as e:
+   print('please enter a valid symbol' + e)
+   exit
+   
 
-reader = csv.reader(csv_data.split('\n'), delimiter=',')
-try:
+try:    
+    i=0
+    reader = csv.reader(csv_data.split('\n'), delimiter=',')    
     for row in reader:
         #skip the row header as it is string not float
         if i>0 and row[4] :
@@ -48,8 +53,7 @@ plt.plot(x, f(x), label='quadratic')      # plot of interpolated data
 plt.legend()
 plt.show()
 
-#except Exception as e:
-#   print( e)
+#############################################################################
 
 x_sqrd = [i**2 for i in x0]
 # here, create lambda functions for Line, Quadratic fit
@@ -80,9 +84,9 @@ print ("quadratic fit" ,tplFinal2)
 xx2=np.array(xx1)
 
 yy2=func(tplFinal2,xx2)
-plt.plot(xx1,yy1,'r-',label='linear')
+plt.plot(xx1,yy1,'r-',label='leastsq linear')
 plt.plot(x0,y0,'bo')
-plt.plot(xx2,yy2,'g-',label='quadratic')
+plt.plot(xx2,yy2,'g-',label='leastsq quadratic')
 plt.legend()
 plt.show()
 
